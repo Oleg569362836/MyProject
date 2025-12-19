@@ -8,3 +8,17 @@ C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в
 C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe
 C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.pdb
 C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe.config
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\Microsoft.Data.Sqlite.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\SQLitePCLRaw.batteries_v2.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\SQLitePCLRaw.core.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Buffers.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Memory.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\Microsoft.Data.Sqlite.xml
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Buffers.xml
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Memory.xml
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\User\Desktop\test pro\Уч.практика 2. Учет продаж в супермаркете\obj\Debug\__._____.73F25B85.Up2Date

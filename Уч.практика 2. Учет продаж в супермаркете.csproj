@@ -71,6 +71,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassCashier.cs" />
+    <Compile Include="ClassCashierForm.cs" />
+    <Compile Include="ClassForm.cs" />
+    <Compile Include="ClassFormSales.cs" />
+    <Compile Include="ClassReportForm.cs" />
+    <Compile Include="DataBase.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
