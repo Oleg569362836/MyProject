@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Уч.практика_2.Учет_продаж_в_супермаркете</name>
+    </assembly>
+    <members>
+        <member name="P:Уч.практика_2.Учет_продаж_в_супермаркете.ClassCashier.Id">
+            <summary>
+            Класс кассира
+            </summary>
+        </member>
+        <member name="T:Уч.практика_2.Учет_продаж_в_супермаркете.ClassFormSales">
+            <summary>
+            Класс продаж
+            </summary>
+        </member>
+        <member name="F:Уч.практика_2.Учет_продаж_в_супермаркете.Form1.components">
+            <summary>
+            Обязательная переменная конструктора.
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.Form1.Dispose(System.Boolean)">
+            <summary>
+            Освободить все используемые ресурсы.
+            </summary>
+            <param name="disposing">истинно, если управляемый ресурс должен быть удален; иначе ложно.</param>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.Form1.InitializeComponent">
+            <summary>
+            Требуемый метод для поддержки конструктора — не изменяйте 
+            содержимое этого метода с помощью редактора кода.
+            </summary>
+        </member>
+        <member name="T:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditSaleForm">
+            <summary>
+            Добавление/редактирование продажи
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditSaleForm.LoadData">
+            <summary>
+            Загрузка информации продуктов
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditSaleForm.CalculateTotal(System.Object,System.EventArgs)">
+            <summary>
+            Считает цену продуктов
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditSaleForm.BtnSave_Click(System.Object,System.EventArgs)">
+            <summary>
+            Показывает цену, кассира и товаров
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditCashierForm">
+            <summary>
+            Добавление/редактирование кассира
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditCashierForm.LoadData">
+            <summary>
+            Загружает информацию о кассире
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.AddEditCashierForm.BtnSave_Click(System.Object,System.EventArgs)">
+            <summary>
+            Показывают информацию о выборе смены и номере кассы
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Уч.практика_2.Учет_продаж_в_супермаркете.ReportForm">
+            <summary>
+            Форма для просмотра отчета
+            </summary>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.ReportForm.#ctor(System.Collections.Generic.List{Уч.практика_2.Учет_продаж_в_супермаркете.ClassFormSales},System.Collections.Generic.List{Уч.практика_2.Учет_продаж_в_супермаркете.ClassCashier},System.DateTime,System.DateTime,System.String,System.String)">
+            <summary>
+            Класс отчета
+            </summary>
+            <param name="sales"></param>
+            <param name="cashiers"></param>
+            <param name="fromDate"></param>
+            <param name="toDate"></param>
+            <param name="cashierFilter"></param>
+            <param name="productFilter"></param>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.ReportForm.GenerateReport(System.Collections.Generic.List{Уч.практика_2.Учет_продаж_в_супермаркете.ClassFormSales},System.Collections.Generic.List{Уч.практика_2.Учет_продаж_в_супермаркете.ClassCashier},System.DateTime,System.DateTime,System.String,System.String)">
+            <summary>
+            Отчет по продажам
+            </summary>
+            <param name="sales"></param>
+            <param name="cashiers"></param>
+            <param name="fromDate"></param>
+            <param name="toDate"></param>
+            <param name="cashierFilter"></param>
+            <param name="productFilter"></param>
+        </member>
+        <member name="M:Уч.практика_2.Учет_продаж_в_супермаркете.Program.Main">
+            <summary>
+            Главная точка входа для приложения.
+            </summary>
+        </member>
+        <member name="T:Уч.практика_2.Учет_продаж_в_супермаркете.Properties.Resources">
+            <summary>
+              Класс ресурсов со строгим типом для поиска локализованных строк и пр.
+            </summary>
+        </member>
+        <member name="P:Уч.практика_2.Учет_продаж_в_супермаркете.Properties.Resources.ResourceManager">
+            <summary>
+              Возврат кэшированного экземпляра ResourceManager, используемого этим классом.
+            </summary>
+        </member>
+        <member name="P:Уч.практика_2.Учет_продаж_в_супермаркете.Properties.Resources.Culture">
+            <summary>
+              Переопределяет свойство CurrentUICulture текущего потока для всех
+              подстановки ресурсов с помощью этого класса ресурсов со строгим типом.
+            </summary>
+        </member>
+    </members>
+</doc>

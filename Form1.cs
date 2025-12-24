@@ -31,29 +31,29 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private Button btnGenerateReport;
 
         // Хранилища данных
-        private List<Sale> sales = new List<Sale>();
-        private List<Cashier> cashiers = new List<Cashier>();
+        private List<ClassFormSales> sales = new List<ClassFormSales>();
+        private List<ClassCashier> cashiers = new List<ClassCashier>();
         private int nextSaleId = 1;
         private int nextCashierId = 1;
 
-        public class Sale
-        {
-            public int Id { get; set; }
-            public DateTime Date { get; set; }
-            public int CashierId { get; set; }
-            public string Product { get; set; }
-            public int Quantity { get; set; }
-            public decimal Price { get; set; }
-            public decimal Total => Quantity * Price;
-        }
+        //public class ClassFormSales
+        //{
+        //    public int Id { get; set; }
+        //    public DateTime Date { get; set; }
+        //    public int CashierId { get; set; }
+        //    public string Product { get; set; }
+        //    public int Quantity { get; set; }
+        //    public decimal Price { get; set; }
+        //    public decimal Total => Quantity * Price;
+        //}
 
-        public class Cashier
-        {
-            public int Id { get; set; }
-            public string FullName { get; set; }
-            public string CashRegister { get; set; }
-            public string Shift { get; set; }
-        }
+        //public class ClassCashier
+        //{
+        //public int Id { get; set; }
+        //public string FullName { get; set; }
+        //public string CashRegister { get; set; }
+        //public string Shift { get; set; }
+        //}
 
         public Form1()
         {
@@ -291,7 +291,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private void AddTestData()
         {
             // Добавляем тестовых кассиров
-            cashiers.Add(new Cashier
+            cashiers.Add(new ClassCashier
             {
                 Id = nextCashierId++,
                 FullName = "Иванов Иван Иванович",
@@ -299,7 +299,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Shift = "Утренняя"
             });
 
-            cashiers.Add(new Cashier
+            cashiers.Add(new ClassCashier
             {
                 Id = nextCashierId++,
                 FullName = "Петров Петр Петрович",
@@ -307,7 +307,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Shift = "Дневная"
             });
 
-            cashiers.Add(new Cashier
+            cashiers.Add(new ClassCashier
             {
                 Id = nextCashierId++,
                 FullName = "Сидорова Анна Сергеевна",
@@ -316,7 +316,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             });
 
             // Добавляем тестовые продажи
-            sales.Add(new Sale
+            sales.Add(new ClassFormSales
             {
                 Id = nextSaleId++,
                 Date = DateTime.Today,
@@ -326,7 +326,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Price = 50
             });
 
-            sales.Add(new Sale
+            sales.Add(new ClassFormSales
             {
                 Id = nextSaleId++,
                 Date = DateTime.Today,
@@ -336,7 +336,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Price = 80
             });
 
-            sales.Add(new Sale
+            sales.Add(new ClassFormSales
             {
                 Id = nextSaleId++,
                 Date = DateTime.Today.AddDays(-1),
@@ -346,7 +346,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Price = 300
             });
 
-            sales.Add(new Sale
+            sales.Add(new ClassFormSales
             {
                 Id = nextSaleId++,
                 Date = DateTime.Today.AddDays(-1),
@@ -356,7 +356,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 Price = 250
             });
 
-            sales.Add(new Sale
+            sales.Add(new ClassFormSales
             {
                 Id = nextSaleId++,
                 Date = DateTime.Today.AddDays(-2),
@@ -571,7 +571,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 DateTime toDate = dateTimePickerTo.Value.Date.AddDays(1).AddSeconds(-1); // Конец дня
 
                 // Начинаем с полного списка продаж
-                IEnumerable<Sale> filteredSales = sales;
+                IEnumerable<ClassFormSales> filteredSales = sales;
 
                 // Фильтрация по дате
                 filteredSales = filteredSales.Where(s => s.Date >= fromDate && s.Date <= toDate);
@@ -646,11 +646,13 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         }
     }
 
-    // Форма для добавления/редактирования продажи
+    /// <summary>
+    /// Добавление/редактирование продажи
+    /// </summary>
     public class AddEditSaleForm : Form
     {
-        private Sale sale;
-        private List<Cashier> cashiers;
+        private ClassFormSales sale;
+        private List<ClassCashier> cashiers;
 
         private DateTimePicker dateTimePicker;
         private ComboBox comboBoxCashier;
@@ -661,12 +663,12 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private Button btnCancel;
         private Label lblTotal;
 
-        public Sale Sale => sale;
+        public ClassFormSales Sale => sale;
 
-        public AddEditSaleForm(Sale existingSale, List<Cashier> cashiersList)
+        public AddEditSaleForm(ClassFormSales existingSale, List<ClassCashier> cashiersList)
         {
             this.cashiers = cashiersList;
-            this.sale = existingSale ?? new Sale();
+            this.sale = existingSale ?? new ClassFormSales();
             InitializeComponents();
             LoadData();
         }
@@ -780,7 +782,9 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             numericQuantity.ValueChanged += CalculateTotal;
             numericPrice.ValueChanged += CalculateTotal;
         }
-
+        /// <summary>
+        /// Загрузка информации продуктов
+        /// </summary>
         private void LoadData()
         {
             if (sale.Id != 0)
@@ -804,13 +808,21 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             }
             CalculateTotal(null, EventArgs.Empty);
         }
-
+        /// <summary>
+        /// Считает цену продуктов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CalculateTotal(object sender, EventArgs e)
         {
             decimal total = numericQuantity.Value * numericPrice.Value;
             lblTotal.Text = $"{total:N2} руб.";
         }
-
+        /// <summary>
+        /// Показывает цену, кассира и товаров
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(comboBoxCashier.Text))
@@ -852,10 +864,12 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         }
     }
 
-    // Форма для добавления/редактирования кассира
+    /// <summary>
+    /// Добавление/редактирование кассира
+    /// </summary>
     public class AddEditCashierForm : Form
     {
-        private Cashier cashier;
+        private ClassCashier cashier;
 
         private TextBox textBoxFullName;
         private ComboBox comboBoxCashRegister;
@@ -863,11 +877,11 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private Button btnSave;
         private Button btnCancel;
 
-        public Cashier Cashier => cashier;
+        public ClassCashier Cashier => cashier;
 
-        public AddEditCashierForm(Cashier existingCashier)
+        public AddEditCashierForm(ClassCashier existingCashier)
         {
-            this.cashier = existingCashier ?? new Cashier();
+            this.cashier = existingCashier ?? new ClassCashier();
             InitializeComponents();
             LoadData();
         }
@@ -932,7 +946,9 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 btnSave, btnCancel
             });
         }
-
+        /// <summary>
+        /// Загружает информацию о кассире
+        /// </summary>
         private void LoadData()
         {
             if (cashier.Id != 0)
@@ -949,7 +965,11 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                     comboBoxShift.SelectedIndex = 0;
             }
         }
-
+        /// <summary>
+        /// Показывают информацию о выборе смены и номере кассы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSave_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBoxFullName.Text))
@@ -976,15 +996,25 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         }
     }
 
-    // Форма для просмотра отчета
+    /// <summary>
+    /// Форма для просмотра отчета
+    /// </summary>
     public class ReportForm : Form
     {
         private DataGridView dataGridViewReport;
         private Label lblReportSummary;
         private Button btnPrint;
         private Button btnExport;
-
-        public ReportForm(List<Sale> sales, List<Cashier> cashiers,
+        /// <summary>
+        /// Класс отчета
+        /// </summary>
+        /// <param name="sales"></param>
+        /// <param name="cashiers"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <param name="cashierFilter"></param>
+        /// <param name="productFilter"></param>
+        public ReportForm(List<ClassFormSales> sales, List<ClassCashier> cashiers,
                          DateTime fromDate, DateTime toDate,
                          string cashierFilter, string productFilter)
         {
@@ -1036,12 +1066,20 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             this.Controls.Add(panelTop);
             this.Controls.Add(panelBottom);
         }
-
-        private void GenerateReport(List<Sale> sales, List<Cashier> cashiers,
+        /// <summary>
+        /// Отчет по продажам
+        /// </summary>
+        /// <param name="sales"></param>
+        /// <param name="cashiers"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <param name="cashierFilter"></param>
+        /// <param name="productFilter"></param>
+        private void GenerateReport(List<ClassFormSales> sales, List<ClassCashier> cashiers,
                                    DateTime fromDate, DateTime toDate,
                                    string cashierFilter, string productFilter)
         {
-            // Настраиваем столбцы отчета
+            // Столбцы отчета
             dataGridViewReport.Columns.Clear();
             dataGridViewReport.Columns.Add("Date", "Дата продажи");
             dataGridViewReport.Columns.Add("Cashier", "Кассир");
