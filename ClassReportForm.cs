@@ -11,8 +11,6 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
     {
         private DataGridView dataGridViewReport;
         private Label lblReportSummary;
-        private Button btnPrint;
-        private Button btnExport;
 
         // Форма для просмотра отчета
         //public class ReportForm : Form

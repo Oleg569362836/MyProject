@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "C:/Users/User/Desktop/РПО/Лушников/MyProject",
+  "source_base_path": "C:/Users/User/Desktop/test pro/MyProject/MyProject",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,7 +9,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "STqPrgEySCButoJ/4Rw8+j8Kl8zBrynBNGMnKLeBnA0="
+          "hash": "G2RDoERuCVyfu7bmf0mId4Z1UiI9XNSDYPAWKRNuUCU="
         }
       },
       "is_incremental": true,
@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "yF4cM99miGSsrT64oV0kgkl56YkQylthgw5Gl1aJqzo="
+          "hash": "uZHatb6Joub7RzqtMOOhwg0L1TSYhvb6d8XjYjyNa6g="
         }
       },
       "is_incremental": true,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "GGOovSab6ZFxRkwbTiKX/AxcXz9WU1qSZOSIhjRqq74="
+          "hash": "Ln65b69mRNvaLJoJoUnLRDyW1M3HWOXVGOBRCq90vzs="
         }
       },
       "is_incremental": true,

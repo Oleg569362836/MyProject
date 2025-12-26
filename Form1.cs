@@ -13,8 +13,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private DataGridView dataGridViewCashiers;
         private TabControl tabControlMain;
         private Button btnAddSale;
-        private Button btnEditSale;
-        private Button btnDeleteSale;
+        private Button btnProcessSale; // Новая кнопка "Оформить продажу"
         private Button btnAddCashier;
         private Button btnEditCashier;
         private Button btnDeleteCashier;
@@ -36,24 +35,14 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         private int nextSaleId = 1;
         private int nextCashierId = 1;
 
-        //public class ClassFormSales
-        //{
-        //    public int Id { get; set; }
-        //    public DateTime Date { get; set; }
-        //    public int CashierId { get; set; }
-        //    public string Product { get; set; }
-        //    public int Quantity { get; set; }
-        //    public decimal Price { get; set; }
-        //    public decimal Total => Quantity * Price;
-        //}
-
-        //public class ClassCashier
-        //{
-        //public int Id { get; set; }
-        //public string FullName { get; set; }
-        //public string CashRegister { get; set; }
-        //public string Shift { get; set; }
-        //}
+        // Цвета для оформления
+        private Color formBackColor = Color.FromArgb(240, 245, 250); // Светло-голубой фон
+        private Color tabBackColor = Color.FromArgb(255, 255, 255); // Белый фон вкладок
+        private Color headerColor = Color.FromArgb(41, 128, 185);
+        private Color successColor = Color.FromArgb(46, 204, 113);
+        private Color infoColor = Color.FromArgb(52, 152, 219);
+        private Color warningColor = Color.FromArgb(241, 196, 15);
+        private Color dangerColor = Color.FromArgb(231, 76, 60);
 
         public Form1()
         {
@@ -71,15 +60,34 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             this.Size = new Size(1000, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
 
+            // УСТАНАВЛИВАЕМ ФОН ГЛАВНОЙ ФОРМЫ
+            this.BackColor = formBackColor;
+            this.BackgroundImageLayout = ImageLayout.None;
+
             // Создаем TabControl
             tabControlMain = new TabControl();
             tabControlMain.Dock = DockStyle.Fill;
             tabControlMain.Padding = new Point(15, 10);
+            tabControlMain.Appearance = TabAppearance.FlatButtons;
+            tabControlMain.ItemSize = new Size(120, 30);
+            tabControlMain.SizeMode = TabSizeMode.Fixed;
+
+            // ВАЖНО: Делаем фон TabControl прозрачным, чтобы был виден фон формы
+            tabControlMain.BackColor = Color.Transparent;
+
+            // Настройка стиля вкладок
+            tabControlMain.DrawMode = TabDrawMode.OwnerDrawFixed;
+            tabControlMain.DrawItem += TabControlMain_DrawItem;
 
             // Вкладка продаж
             TabPage tabSales = new TabPage("Продажи");
             TabPage tabCashiers = new TabPage("Кассиры");
             TabPage tabReports = new TabPage("Отчеты");
+
+            // Настройка фона вкладок - делаем их белыми для контраста
+            tabSales.BackColor = tabBackColor;
+            tabCashiers.BackColor = tabBackColor;
+            tabReports.BackColor = tabBackColor;
 
             // Создаем DataGridView для продаж
             dataGridViewSales = new DataGridView();
@@ -88,6 +96,16 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             dataGridViewSales.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewSales.MultiSelect = false;
             dataGridViewSales.ReadOnly = true;
+            dataGridViewSales.BackgroundColor = Color.White;
+            dataGridViewSales.BorderStyle = BorderStyle.FixedSingle;
+            dataGridViewSales.ColumnHeadersDefaultCellStyle.BackColor = headerColor;
+            dataGridViewSales.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewSales.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dataGridViewSales.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 248);
+            dataGridViewSales.RowHeadersVisible = false;
+            dataGridViewSales.EnableHeadersVisualStyles = false;
+            dataGridViewSales.GridColor = Color.FromArgb(224, 224, 224);
+            dataGridViewSales.DefaultCellStyle.Font = new Font("Arial", 9);
 
             // Добавляем колонки
             dataGridViewSales.Columns.Add("Id", "ID");
@@ -105,6 +123,16 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             dataGridViewCashiers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridViewCashiers.MultiSelect = false;
             dataGridViewCashiers.ReadOnly = true;
+            dataGridViewCashiers.BackgroundColor = Color.White;
+            dataGridViewCashiers.BorderStyle = BorderStyle.FixedSingle;
+            dataGridViewCashiers.ColumnHeadersDefaultCellStyle.BackColor = headerColor;
+            dataGridViewCashiers.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewCashiers.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dataGridViewCashiers.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 248);
+            dataGridViewCashiers.RowHeadersVisible = false;
+            dataGridViewCashiers.EnableHeadersVisualStyles = false;
+            dataGridViewCashiers.GridColor = Color.FromArgb(224, 224, 224);
+            dataGridViewCashiers.DefaultCellStyle.Font = new Font("Arial", 9);
 
             dataGridViewCashiers.Columns.Add("Id", "ID");
             dataGridViewCashiers.Columns.Add("FullName", "ФИО кассира");
@@ -114,133 +142,131 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             // Панель с кнопками для продаж
             Panel panelSalesButtons = new Panel();
             panelSalesButtons.Dock = DockStyle.Bottom;
-            panelSalesButtons.Height = 60;
-            panelSalesButtons.Padding = new Padding(10);
+            panelSalesButtons.Height = 80;
+            panelSalesButtons.Padding = new Padding(20, 10, 20, 10);
+            panelSalesButtons.BackColor = Color.FromArgb(245, 247, 250);
 
-            btnAddSale = new Button();
-            btnAddSale.Text = "Добавить продажу";
-            btnAddSale.Size = new Size(150, 35);
-            btnAddSale.Location = new Point(20, 10);
+            btnAddSale = CreateButton("Добавить продажу", successColor, new Point(20, 15));
             btnAddSale.Click += BtnAddSale_Click;
 
-            btnEditSale = new Button();
-            btnEditSale.Text = "Редактировать";
-            btnEditSale.Size = new Size(150, 35);
-            btnEditSale.Location = new Point(180, 10);
-            btnEditSale.Click += BtnEditSale_Click;
-            btnEditSale.Enabled = false;
-
-            btnDeleteSale = new Button();
-            btnDeleteSale.Text = "Удалить";
-            btnDeleteSale.Size = new Size(150, 35);
-            btnDeleteSale.Location = new Point(340, 10);
-            btnDeleteSale.Click += BtnDeleteSale_Click;
-            btnDeleteSale.Enabled = false;
+            btnProcessSale = CreateButton("Оформить продажу", infoColor, new Point(190, 15)); // Новая кнопка
+            btnProcessSale.Click += BtnProcessSale_Click;
+            btnProcessSale.Enabled = false;
 
             // Панель с кнопками для кассиров
             Panel panelCashiersButtons = new Panel();
             panelCashiersButtons.Dock = DockStyle.Bottom;
-            panelCashiersButtons.Height = 60;
-            panelCashiersButtons.Padding = new Padding(10);
+            panelCashiersButtons.Height = 80;
+            panelCashiersButtons.Padding = new Padding(20, 10, 20, 10);
+            panelCashiersButtons.BackColor = Color.FromArgb(245, 247, 250);
 
-            btnAddCashier = new Button();
-            btnAddCashier.Text = "Добавить кассира";
-            btnAddCashier.Size = new Size(150, 35);
-            btnAddCashier.Location = new Point(20, 10);
+            btnAddCashier = CreateButton("Добавить кассира", successColor, new Point(20, 15));
             btnAddCashier.Click += BtnAddCashier_Click;
 
-            btnEditCashier = new Button();
-            btnEditCashier.Text = "Редактировать";
-            btnEditCashier.Size = new Size(150, 35);
-            btnEditCashier.Location = new Point(180, 10);
+            btnEditCashier = CreateButton("Редактировать", warningColor, new Point(190, 15));
             btnEditCashier.Click += BtnEditCashier_Click;
             btnEditCashier.Enabled = false;
 
-            btnDeleteCashier = new Button();
-            btnDeleteCashier.Text = "Удалить";
-            btnDeleteCashier.Size = new Size(150, 35);
-            btnDeleteCashier.Location = new Point(340, 10);
+            btnDeleteCashier = CreateButton("Удалить", dangerColor, new Point(360, 15));
             btnDeleteCashier.Click += BtnDeleteCashier_Click;
             btnDeleteCashier.Enabled = false;
 
             // Элементы для вкладки отчетов
             Panel panelFilters = new Panel();
             panelFilters.Dock = DockStyle.Top;
-            panelFilters.Height = 120;
+            panelFilters.Height = 140;
+            panelFilters.Padding = new Padding(20);
+            panelFilters.BackColor = Color.White;
             panelFilters.BorderStyle = BorderStyle.FixedSingle;
-            panelFilters.Padding = new Padding(10);
 
             label1 = new Label();
             label1.Text = "Кассир:";
-            label1.Location = new Point(20, 20);
-            label1.Size = new Size(60, 20);
+            label1.Location = new Point(20, 25);
+            label1.Size = new Size(70, 25);
+            label1.Font = new Font("Arial", 10, FontStyle.Bold);
+            label1.ForeColor = Color.FromArgb(52, 73, 94);
 
             comboBoxCashierFilter = new ComboBox();
-            comboBoxCashierFilter.Location = new Point(85, 17);
-            comboBoxCashierFilter.Size = new Size(200, 25);
+            comboBoxCashierFilter.Location = new Point(100, 22);
+            comboBoxCashierFilter.Size = new Size(220, 30);
             comboBoxCashierFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxCashierFilter.Font = new Font("Arial", 10);
+            comboBoxCashierFilter.BackColor = Color.White;
+            comboBoxCashierFilter.FlatStyle = FlatStyle.Flat;
 
             label2 = new Label();
             label2.Text = "Товар:";
-            label2.Location = new Point(300, 20);
-            label2.Size = new Size(60, 20);
+            label2.Location = new Point(340, 25);
+            label2.Size = new Size(70, 25);
+            label2.Font = new Font("Arial", 10, FontStyle.Bold);
+            label2.ForeColor = Color.FromArgb(52, 73, 94);
 
             comboBoxProductFilter = new ComboBox();
-            comboBoxProductFilter.Location = new Point(365, 17);
-            comboBoxProductFilter.Size = new Size(200, 25);
+            comboBoxProductFilter.Location = new Point(420, 22);
+            comboBoxProductFilter.Size = new Size(220, 30);
             comboBoxProductFilter.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBoxProductFilter.Font = new Font("Arial", 10);
             comboBoxProductFilter.Items.AddRange(new string[] { "Все товары", "Хлеб", "Молоко", "Колбаса", "Сыр", "Вода", "Чай", "Кофе", "Сахар" });
+            comboBoxProductFilter.BackColor = Color.White;
+            comboBoxProductFilter.FlatStyle = FlatStyle.Flat;
 
             label3 = new Label();
             label3.Text = "С:";
-            label3.Location = new Point(20, 60);
-            label3.Size = new Size(30, 20);
+            label3.Location = new Point(20, 75);
+            label3.Size = new Size(40, 25);
+            label3.Font = new Font("Arial", 10, FontStyle.Bold);
+            label3.ForeColor = Color.FromArgb(52, 73, 94);
 
             dateTimePickerFrom = new DateTimePicker();
-            dateTimePickerFrom.Location = new Point(50, 57);
-            dateTimePickerFrom.Size = new Size(150, 25);
+            dateTimePickerFrom.Location = new Point(60, 72);
+            dateTimePickerFrom.Size = new Size(170, 30);
             dateTimePickerFrom.Value = DateTime.Today.AddDays(-7);
+            dateTimePickerFrom.Font = new Font("Arial", 10);
+            dateTimePickerFrom.CalendarMonthBackground = Color.White;
+            dateTimePickerFrom.CalendarTitleBackColor = headerColor;
+            dateTimePickerFrom.CalendarTitleForeColor = Color.White;
 
             label4 = new Label();
             label4.Text = "По:";
-            label4.Location = new Point(210, 60);
-            label4.Size = new Size(40, 20);
+            label4.Location = new Point(250, 75);
+            label4.Size = new Size(50, 25);
+            label4.Font = new Font("Arial", 10, FontStyle.Bold);
+            label4.ForeColor = Color.FromArgb(52, 73, 94);
 
             dateTimePickerTo = new DateTimePicker();
-            dateTimePickerTo.Location = new Point(250, 57);
-            dateTimePickerTo.Size = new Size(150, 25);
+            dateTimePickerTo.Location = new Point(300, 72);
+            dateTimePickerTo.Size = new Size(170, 30);
             dateTimePickerTo.Value = DateTime.Today;
+            dateTimePickerTo.Font = new Font("Arial", 10);
+            dateTimePickerTo.CalendarMonthBackground = Color.White;
+            dateTimePickerTo.CalendarTitleBackColor = headerColor;
+            dateTimePickerTo.CalendarTitleForeColor = Color.White;
 
-            btnCalculateRevenue = new Button();
-            btnCalculateRevenue.Text = "Рассчитать выручку";
-            btnCalculateRevenue.Size = new Size(150, 35);
-            btnCalculateRevenue.Location = new Point(420, 50);
+            btnCalculateRevenue = CreateButton("Рассчитать выручку", successColor, new Point(490, 65));
             btnCalculateRevenue.Click += BtnCalculateRevenue_Click;
 
-            btnGenerateReport = new Button();
-            btnGenerateReport.Text = "Сформировать отчет";
-            btnGenerateReport.Size = new Size(150, 35);
-            btnGenerateReport.Location = new Point(580, 50);
+            btnGenerateReport = CreateButton("Сформировать отчет", infoColor, new Point(670, 65));
             btnGenerateReport.Click += BtnGenerateReport_Click;
 
             Panel panelResults = new Panel();
             panelResults.Dock = DockStyle.Top;
-            panelResults.Height = 100;
-            panelResults.Top = 120;
+            panelResults.Height = 120;
+            panelResults.Top = 140;
+            panelResults.Padding = new Padding(30);
+            panelResults.BackColor = Color.FromArgb(52, 152, 219);
             panelResults.BorderStyle = BorderStyle.FixedSingle;
-            panelResults.Padding = new Padding(20);
 
             lblTotalRevenue = new Label();
             lblTotalRevenue.Text = "Общая выручка: 0 руб.";
-            lblTotalRevenue.Font = new Font("Arial", 14, FontStyle.Bold);
-            lblTotalRevenue.ForeColor = Color.Green;
-            lblTotalRevenue.Location = new Point(20, 20);
-            lblTotalRevenue.Size = new Size(400, 30);
+            lblTotalRevenue.Font = new Font("Arial", 18, FontStyle.Bold);
+            lblTotalRevenue.ForeColor = Color.White;
+            lblTotalRevenue.Location = new Point(20, 25);
+            lblTotalRevenue.Size = new Size(600, 40);
+            lblTotalRevenue.TextAlign = ContentAlignment.MiddleLeft;
 
             // Добавляем элементы на вкладки
             panelSalesButtons.Controls.Add(btnAddSale);
-            panelSalesButtons.Controls.Add(btnEditSale);
-            panelSalesButtons.Controls.Add(btnDeleteSale);
+            panelSalesButtons.Controls.Add(btnProcessSale);
             tabSales.Controls.Add(dataGridViewSales);
             tabSales.Controls.Add(panelSalesButtons);
 
@@ -276,8 +302,19 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             dataGridViewSales.SelectionChanged += (s, e) =>
             {
                 bool hasSelection = dataGridViewSales.SelectedRows.Count > 0;
-                btnEditSale.Enabled = hasSelection;
-                btnDeleteSale.Enabled = hasSelection;
+                btnProcessSale.Enabled = hasSelection;
+
+                // Обновляем цвет кнопки в зависимости от состояния
+                if (hasSelection)
+                {
+                    btnProcessSale.BackColor = infoColor;
+                    btnProcessSale.ForeColor = Color.White;
+                }
+                else
+                {
+                    btnProcessSale.BackColor = Color.FromArgb(200, 200, 200);
+                    btnProcessSale.ForeColor = Color.Gray;
+                }
             };
 
             dataGridViewCashiers.SelectionChanged += (s, e) =>
@@ -285,7 +322,109 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 bool hasSelection = dataGridViewCashiers.SelectedRows.Count > 0;
                 btnEditCashier.Enabled = hasSelection;
                 btnDeleteCashier.Enabled = hasSelection;
+
+                // Обновляем цвета кнопок
+                if (hasSelection)
+                {
+                    btnEditCashier.BackColor = warningColor;
+                    btnEditCashier.ForeColor = Color.White;
+                    btnDeleteCashier.BackColor = dangerColor;
+                    btnDeleteCashier.ForeColor = Color.White;
+                }
+                else
+                {
+                    btnEditCashier.BackColor = Color.FromArgb(200, 200, 200);
+                    btnEditCashier.ForeColor = Color.Gray;
+                    btnDeleteCashier.BackColor = Color.FromArgb(200, 200, 200);
+                    btnDeleteCashier.ForeColor = Color.Gray;
+                }
             };
+        }
+
+        private void TabControlMain_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            Brush textBrush;
+
+            // Получаем текущую вкладку
+            TabPage tabPage = tabControlMain.TabPages[e.Index];
+
+            // Получаем прямоугольник вкладки
+            Rectangle tabBounds = tabControlMain.GetTabRect(e.Index);
+
+            if (e.State == DrawItemState.Selected)
+            {
+                // Выбранная вкладка
+                g.FillRectangle(new SolidBrush(headerColor), tabBounds);
+                textBrush = new SolidBrush(Color.White);
+            }
+            else
+            {
+                // Невыбранная вкладка
+                g.FillRectangle(new SolidBrush(Color.FromArgb(230, 230, 230)), tabBounds);
+                textBrush = new SolidBrush(Color.FromArgb(100, 100, 100));
+            }
+
+            // Рисуем текст вкладки
+            StringFormat stringFlags = new StringFormat();
+            stringFlags.Alignment = StringAlignment.Center;
+            stringFlags.LineAlignment = StringAlignment.Center;
+            g.DrawString(tabPage.Text, new Font("Arial", 10, FontStyle.Bold),
+                        textBrush, tabBounds, stringFlags);
+        }
+
+        private Button CreateButton(string text, Color color, Point location)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.Size = new Size(170, 40);
+            button.Location = location;
+            button.Font = new Font("Arial", 10, FontStyle.Bold);
+            button.BackColor = color;
+            button.ForeColor = Color.White;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Cursor = Cursors.Hand;
+
+            // Эффект при наведении
+            button.MouseEnter += (s, e) =>
+            {
+                if (button.Enabled)
+                {
+                    Control ctrl = s as Control;
+                    ctrl.BackColor = ControlPaint.Light(color, 0.2f);
+                }
+            };
+
+            button.MouseLeave += (s, e) =>
+            {
+                if (button.Enabled)
+                {
+                    Control ctrl = s as Control;
+                    ctrl.BackColor = color;
+                }
+            };
+
+            // Эффект при нажатии
+            button.MouseDown += (s, e) =>
+            {
+                if (button.Enabled)
+                {
+                    Control ctrl = s as Control;
+                    ctrl.BackColor = ControlPaint.Dark(color, 0.1f);
+                }
+            };
+
+            button.MouseUp += (s, e) =>
+            {
+                if (button.Enabled)
+                {
+                    Control ctrl = s as Control;
+                    ctrl.BackColor = ControlPaint.Light(color, 0.2f);
+                }
+            };
+
+            return button;
         }
 
         private void AddTestData()
@@ -446,47 +585,25 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             }
         }
 
-        private void BtnEditSale_Click(object sender, EventArgs e)
+        private void BtnProcessSale_Click(object sender, EventArgs e)
         {
             if (dataGridViewSales.SelectedRows.Count == 0) return;
 
             int saleId = Convert.ToInt32(dataGridViewSales.SelectedRows[0].Cells["Id"].Value);
-            var saleToEdit = sales.FirstOrDefault(s => s.Id == saleId);
+            var saleToProcess = sales.FirstOrDefault(s => s.Id == saleId);
 
-            if (saleToEdit != null)
+            if (saleToProcess != null)
             {
-                using (var form = new AddEditSaleForm(saleToEdit, cashiers))
-                {
-                    if (form.ShowDialog() == DialogResult.OK)
-                    {
-                        RefreshDataGridViews();
-                        MessageBox.Show("Продажа успешно обновлена!", "Успех",
-                            MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
-            }
-        }
+                // Здесь можно добавить логику оформления продажи
+                // Например, печать чека, отметка об оплате и т.д.
 
-        private void BtnDeleteSale_Click(object sender, EventArgs e)
-        {
-            if (dataGridViewSales.SelectedRows.Count == 0) return;
-
-            int saleId = Convert.ToInt32(dataGridViewSales.SelectedRows[0].Cells["Id"].Value);
-
-            var result = MessageBox.Show("Вы уверены, что хотите удалить эту продажу?",
-                "Подтверждение удаления",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
-            {
-                var saleToDelete = sales.FirstOrDefault(s => s.Id == saleId);
-                if (saleToDelete != null)
-                {
-                    sales.Remove(saleToDelete);
-                    RefreshDataGridViews();
-                    MessageBox.Show("Продажа успешно удалена!", "Успех",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                MessageBox.Show($"Продажа #{saleId} успешно оформлена!\n" +
+                              $"Товар: {saleToProcess.Product}\n" +
+                              $"Количество: {saleToProcess.Quantity}\n" +
+                              $"Сумма: {saleToProcess.Total:N2} руб.\n" +
+                              $"Дата: {saleToProcess.Date:dd.MM.yyyy}",
+                              "Продажа оформлена",
+                              MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -669,35 +786,60 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         {
             this.cashiers = cashiersList;
             this.sale = existingSale ?? new ClassFormSales();
+
+            // Настройки формы
+            this.Text = sale.Id == 0 ? "Добавить продажу" : "Редактировать продажу";
+            this.Size = new Size(450, 400);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.BackColor = Color.FromArgb(240, 245, 250); // Тот же цвет фона, что и у главной формы
+            this.Padding = new Padding(20);
+
             InitializeComponents();
             LoadData();
         }
 
         private void InitializeComponents()
         {
-            this.Text = sale.Id == 0 ? "Добавить продажу" : "Редактировать продажу";
-            this.Size = new Size(400, 350);
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-
             // Дата продажи
-            Label lblDate = new Label { Text = "Дата продажи:", Location = new Point(20, 20), Size = new Size(120, 20) };
+            Label lblDate = new Label
+            {
+                Text = "Дата продажи:",
+                Location = new Point(30, 30),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             dateTimePicker = new DateTimePicker
             {
-                Location = new Point(150, 17),
-                Size = new Size(200, 25),
-                Value = DateTime.Now
+                Location = new Point(190, 27),
+                Size = new Size(220, 30),
+                Value = DateTime.Now,
+                Font = new Font("Arial", 10),
+                CalendarMonthBackground = Color.White,
+                CalendarTitleBackColor = Color.FromArgb(41, 128, 185),
+                CalendarTitleForeColor = Color.White
             };
 
             // Кассир
-            Label lblCashier = new Label { Text = "Кассир:", Location = new Point(20, 60), Size = new Size(120, 20) };
+            Label lblCashier = new Label
+            {
+                Text = "Кассир:",
+                Location = new Point(30, 80),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             comboBoxCashier = new ComboBox
             {
-                Location = new Point(150, 57),
-                Size = new Size(200, 25),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Location = new Point(190, 77),
+                Size = new Size(220, 30),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Arial", 10)
             };
             foreach (var cashier in cashiers)
             {
@@ -705,66 +847,94 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             }
 
             // Товар
-            Label lblProduct = new Label { Text = "Товар:", Location = new Point(20, 100), Size = new Size(120, 20) };
+            Label lblProduct = new Label
+            {
+                Text = "Товар:",
+                Location = new Point(30, 130),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             comboBoxProduct = new ComboBox
             {
-                Location = new Point(150, 97),
-                Size = new Size(200, 25),
-                DropDownStyle = ComboBoxStyle.DropDown
+                Location = new Point(190, 127),
+                Size = new Size(220, 30),
+                DropDownStyle = ComboBoxStyle.DropDown,
+                Font = new Font("Arial", 10)
             };
             comboBoxProduct.Items.AddRange(new string[] { "Хлеб", "Молоко", "Колбаса", "Сыр", "Вода", "Чай", "Кофе", "Сахар" });
 
             // Количество
-            Label lblQuantity = new Label { Text = "Количество:", Location = new Point(20, 140), Size = new Size(120, 20) };
+            Label lblQuantity = new Label
+            {
+                Text = "Количество:",
+                Location = new Point(30, 180),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             numericQuantity = new NumericUpDown
             {
-                Location = new Point(150, 137),
-                Size = new Size(100, 25),
+                Location = new Point(190, 177),
+                Size = new Size(120, 30),
                 Minimum = 1,
                 Maximum = 1000,
-                Value = 1
+                Value = 1,
+                Font = new Font("Arial", 10),
+                BackColor = Color.White
             };
 
             // Цена
-            Label lblPrice = new Label { Text = "Цена:", Location = new Point(20, 180), Size = new Size(120, 20) };
+            Label lblPrice = new Label
+            {
+                Text = "Цена (руб.):",
+                Location = new Point(30, 230),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             numericPrice = new NumericUpDown
             {
-                Location = new Point(150, 177),
-                Size = new Size(100, 25),
+                Location = new Point(190, 227),
+                Size = new Size(120, 30),
                 Minimum = 0.01m,
                 Maximum = 100000,
                 DecimalPlaces = 2,
-                Value = 1.00m
+                Value = 1.00m,
+                Font = new Font("Arial", 10),
+                BackColor = Color.White
             };
 
             // Итоговая сумма
-            Label lblTotalLabel = new Label { Text = "Итоговая сумма:", Location = new Point(20, 220), Size = new Size(120, 20) };
+            Label lblTotalLabel = new Label
+            {
+                Text = "Итоговая сумма:",
+                Location = new Point(30, 280),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             lblTotal = new Label
             {
                 Text = "0.00 руб.",
-                Location = new Point(150, 217),
-                Size = new Size(120, 20),
-                Font = new Font("Arial", 10, FontStyle.Bold),
-                ForeColor = Color.Green
+                Location = new Point(190, 277),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 12, FontStyle.Bold),
+                ForeColor = Color.FromArgb(46, 204, 113),
+                TextAlign = ContentAlignment.MiddleLeft
             };
 
             // Кнопки
-            btnSave = new Button
-            {
-                Text = "Сохранить",
-                Location = new Point(150, 260),
-                Size = new Size(100, 30),
-                DialogResult = DialogResult.OK
-            };
+            btnSave = CreateButton("Сохранить", Color.FromArgb(46, 204, 113), new Point(150, 320));
+            btnSave.DialogResult = DialogResult.OK;
             btnSave.Click += BtnSave_Click;
 
-            btnCancel = new Button
-            {
-                Text = "Отмена",
-                Location = new Point(260, 260),
-                Size = new Size(100, 30),
-                DialogResult = DialogResult.Cancel
-            };
+            btnCancel = CreateButton("Отмена", Color.FromArgb(231, 76, 60), new Point(280, 320));
+            btnCancel.DialogResult = DialogResult.Cancel;
 
             // Добавляем элементы на форму
             this.Controls.AddRange(new Control[]
@@ -782,6 +952,36 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
             numericQuantity.ValueChanged += CalculateTotal;
             numericPrice.ValueChanged += CalculateTotal;
         }
+
+        private Button CreateButton(string text, Color color, Point location)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.Size = new Size(120, 35);
+            button.Location = location;
+            button.Font = new Font("Arial", 10, FontStyle.Bold);
+            button.BackColor = color;
+            button.ForeColor = Color.White;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Cursor = Cursors.Hand;
+
+            // Эффект при наведении
+            button.MouseEnter += (s, e) =>
+            {
+                Control ctrl = s as Control;
+                ctrl.BackColor = ControlPaint.Light(color, 0.2f);
+            };
+
+            button.MouseLeave += (s, e) =>
+            {
+                Control ctrl = s as Control;
+                ctrl.BackColor = color;
+            };
+
+            return button;
+        }
+
         /// <summary>
         /// Загрузка информации продуктов
         /// </summary>
@@ -882,60 +1082,85 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
         public AddEditCashierForm(ClassCashier existingCashier)
         {
             this.cashier = existingCashier ?? new ClassCashier();
+
+            // Настройки формы
+            this.Text = cashier.Id == 0 ? "Добавить кассира" : "Редактировать кассира";
+            this.Size = new Size(450, 300);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.BackColor = Color.FromArgb(240, 245, 250); // Тот же цвет фона, что и у главной формы
+            this.Padding = new Padding(20);
+
             InitializeComponents();
             LoadData();
         }
 
         private void InitializeComponents()
         {
-            this.Text = cashier.Id == 0 ? "Добавить кассира" : "Редактировать кассира";
-            this.Size = new Size(400, 250);
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.FormBorderStyle = FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-
             // ФИО
-            Label lblFullName = new Label { Text = "ФИО:", Location = new Point(20, 20), Size = new Size(120, 20) };
-            textBoxFullName = new TextBox { Location = new Point(150, 17), Size = new Size(200, 25) };
+            Label lblFullName = new Label
+            {
+                Text = "ФИО:",
+                Location = new Point(30, 30),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
+            textBoxFullName = new TextBox
+            {
+                Location = new Point(190, 27),
+                Size = new Size(220, 30),
+                Font = new Font("Arial", 10)
+            };
 
             // Номер кассы
-            Label lblCashRegister = new Label { Text = "Номер кассы:", Location = new Point(20, 60), Size = new Size(120, 20) };
+            Label lblCashRegister = new Label
+            {
+                Text = "Номер кассы:",
+                Location = new Point(30, 80),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             comboBoxCashRegister = new ComboBox
             {
-                Location = new Point(150, 57),
-                Size = new Size(200, 25),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Location = new Point(190, 77),
+                Size = new Size(220, 30),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Arial", 10)
             };
             comboBoxCashRegister.Items.AddRange(new string[] { "Касса 1", "Касса 2", "Касса 3", "Касса 4", "Касса 5", "Касса 6" });
 
             // Смена
-            Label lblShift = new Label { Text = "Смена:", Location = new Point(20, 100), Size = new Size(120, 20) };
+            Label lblShift = new Label
+            {
+                Text = "Смена:",
+                Location = new Point(30, 130),
+                Size = new Size(150, 25),
+                Font = new Font("Arial", 10, FontStyle.Bold),
+                ForeColor = Color.FromArgb(52, 73, 94)
+            };
+
             comboBoxShift = new ComboBox
             {
-                Location = new Point(150, 97),
-                Size = new Size(200, 25),
-                DropDownStyle = ComboBoxStyle.DropDownList
+                Location = new Point(190, 127),
+                Size = new Size(220, 30),
+                DropDownStyle = ComboBoxStyle.DropDownList,
+                Font = new Font("Arial", 10)
             };
             comboBoxShift.Items.AddRange(new string[] { "Утренняя", "Дневная", "Вечерняя", "Ночная" });
 
             // Кнопки
-            btnSave = new Button
-            {
-                Text = "Сохранить",
-                Location = new Point(150, 150),
-                Size = new Size(100, 30),
-                DialogResult = DialogResult.OK
-            };
+            btnSave = CreateButton("Сохранить", Color.FromArgb(46, 204, 113), new Point(150, 180));
+            btnSave.DialogResult = DialogResult.OK;
             btnSave.Click += BtnSave_Click;
 
-            btnCancel = new Button
-            {
-                Text = "Отмена",
-                Location = new Point(260, 150),
-                Size = new Size(100, 30),
-                DialogResult = DialogResult.Cancel
-            };
+            btnCancel = CreateButton("Отмена", Color.FromArgb(231, 76, 60), new Point(280, 180));
+            btnCancel.DialogResult = DialogResult.Cancel;
 
             // Добавляем элементы на форму
             this.Controls.AddRange(new Control[]
@@ -946,6 +1171,36 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 btnSave, btnCancel
             });
         }
+
+        private Button CreateButton(string text, Color color, Point location)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.Size = new Size(120, 35);
+            button.Location = location;
+            button.Font = new Font("Arial", 10, FontStyle.Bold);
+            button.BackColor = color;
+            button.ForeColor = Color.White;
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Cursor = Cursors.Hand;
+
+            // Эффект при наведении
+            button.MouseEnter += (s, e) =>
+            {
+                Control ctrl = s as Control;
+                ctrl.BackColor = ControlPaint.Light(color, 0.2f);
+            };
+
+            button.MouseLeave += (s, e) =>
+            {
+                Control ctrl = s as Control;
+                ctrl.BackColor = color;
+            };
+
+            return button;
+        }
+
         /// <summary>
         /// Загружает информацию о кассире
         /// </summary>
@@ -1003,8 +1258,7 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
     {
         private DataGridView dataGridViewReport;
         private Label lblReportSummary;
-        private Button btnPrint;
-        private Button btnExport;
+
         /// <summary>
         /// Класс отчета
         /// </summary>
@@ -1018,49 +1272,53 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                          DateTime fromDate, DateTime toDate,
                          string cashierFilter, string productFilter)
         {
+            // Настройки формы
+            this.Text = "Отчет по продажам";
+            this.Size = new Size(950, 700);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.BackColor = Color.FromArgb(240, 245, 250); // Тот же цвет фона, что и у главной формы
+
             InitializeComponents();
             GenerateReport(sales, cashiers, fromDate, toDate, cashierFilter, productFilter);
         }
 
         private void InitializeComponents()
         {
-            this.Text = "Отчет по продажам";
-            this.Size = new Size(900, 650);
-            this.StartPosition = FormStartPosition.CenterParent;
-
             dataGridViewReport = new DataGridView();
             dataGridViewReport.Dock = DockStyle.Fill;
             dataGridViewReport.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewReport.ReadOnly = true;
             dataGridViewReport.AllowUserToAddRows = false;
+            dataGridViewReport.BackgroundColor = Color.White;
+            dataGridViewReport.BorderStyle = BorderStyle.FixedSingle;
+            dataGridViewReport.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(41, 128, 185);
+            dataGridViewReport.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridViewReport.ColumnHeadersDefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
+            dataGridViewReport.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 248, 248);
+            dataGridViewReport.RowHeadersVisible = false;
+            dataGridViewReport.EnableHeadersVisualStyles = false;
+            dataGridViewReport.GridColor = Color.FromArgb(224, 224, 224);
 
             Panel panelTop = new Panel();
             panelTop.Dock = DockStyle.Top;
-            panelTop.Height = 80;
-            panelTop.Padding = new Padding(10);
+            panelTop.Height = 100;
+            panelTop.Padding = new Padding(20);
+            panelTop.BackColor = Color.White;
             panelTop.BorderStyle = BorderStyle.FixedSingle;
 
             lblReportSummary = new Label();
             lblReportSummary.Dock = DockStyle.Fill;
-            lblReportSummary.Font = new Font("Arial", 10);
+            lblReportSummary.Font = new Font("Arial", 11);
+            lblReportSummary.ForeColor = Color.FromArgb(52, 73, 94);
             lblReportSummary.TextAlign = ContentAlignment.MiddleLeft;
 
             Panel panelBottom = new Panel();
             panelBottom.Dock = DockStyle.Bottom;
-            panelBottom.Height = 60;
+            panelBottom.Height = 40;
             panelBottom.Padding = new Padding(10);
-
-            btnPrint = new Button { Text = "Печать", Size = new Size(120, 35) };
-            btnPrint.Click += (s, e) => MessageBox.Show("Функция печати в разработке", "Информация",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            btnExport = new Button { Text = "Экспорт в Excel", Size = new Size(120, 35), Left = 140 };
-            btnExport.Click += (s, e) => MessageBox.Show("Функция экспорта в разработке", "Информация",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            panelBottom.BackColor = Color.FromArgb(245, 247, 250);
 
             panelTop.Controls.Add(lblReportSummary);
-            panelBottom.Controls.Add(btnPrint);
-            panelBottom.Controls.Add(btnExport);
 
             this.Controls.Add(dataGridViewReport);
             this.Controls.Add(panelTop);
@@ -1150,8 +1408,9 @@ namespace Уч.практика_2.Учет_продаж_в_супермарке�
                 );
 
                 var lastRow = dataGridViewReport.Rows[dataGridViewReport.Rows.Count - 1];
-                lastRow.DefaultCellStyle.Font = new Font("Arial", 10, FontStyle.Bold);
-                lastRow.DefaultCellStyle.BackColor = Color.LightYellow;
+                lastRow.DefaultCellStyle.Font = new Font("Arial", 11, FontStyle.Bold);
+                lastRow.DefaultCellStyle.BackColor = Color.FromArgb(241, 196, 15);
+                lastRow.DefaultCellStyle.ForeColor = Color.White;
             }
 
             // Обновляем информацию в заголовке

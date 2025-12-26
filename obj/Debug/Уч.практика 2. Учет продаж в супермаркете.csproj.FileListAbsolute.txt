@@ -47,3 +47,29 @@ C:\Users\User\Desktop\РПО\Лушников\MyProject\obj\Debug\__._____.73F25
 C:\Users\User\Desktop\РПО\Лушников\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe
 C:\Users\User\Desktop\РПО\Лушников\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.pdb
 C:\Users\User\Desktop\РПО\Лушников\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe.config
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe.config
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.pdb
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Microsoft.Data.Sqlite.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\SQLitePCLRaw.batteries_v2.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\SQLitePCLRaw.core.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\SQLitePCLRaw.provider.dynamic_cdecl.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Buffers.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Memory.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\Microsoft.Data.Sqlite.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Buffers.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Memory.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика 2. Учет продаж в супермаркете.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.Properties.Resources.resources
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика 2. Учет продаж в супермаркете.csproj.GenerateResource.cache
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика 2. Учет продаж в супермаркете.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\__._____.73F25B85.Up2Date
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.pdb
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.exe.config
+C:\Users\User\Desktop\test pro\MyProject\MyProject\obj\Debug\Уч.практика_2.Учет_продаж_в_супермаркете.Form1.resources
